@@ -11,10 +11,14 @@
         "vscode": {
         // Add extension IDs to this array.
         "extensions": [
-            "ms-python.python",          // Core Python extension
-            "ms-python.vscode-pylance",  // Fast, feature-rich language support
-            "ms-python.debugpy"          // Debugger support
-        ]
+            "ms-python.python",
+            "ms-python.vscode-pylance",
+            "ms-python.debugpy",
+            "google.geminicodeassist"
+        ],
+        "settings": {
+            "editor.formatOnSave": true
+        }
         }
     }
 }
