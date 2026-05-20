@@ -91,15 +91,32 @@ x-airflow-common:
 
 services:
   postgres:
+    container_name: pg_airflow
     image: postgres:16
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
     volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
+      - pg-airflow-db-volume:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: always
+
+  postgres_data:
+    container_name: pg_data
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${PG_DATA_ADMIN}
+      POSTGRES_PASSWORD: ${PG_DATA_PASSWORD}
+      POSTGRES_DB: ${PG_DATA_DB}
+    volumes:
+      - pg-data-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${PG_DATA_ADMIN}"]
       interval: 10s
       retries: 5
       start_period: 5s
@@ -334,4 +351,5 @@ services:
         condition: service_completed_successfully
 
 volumes:
-  postgres-db-volume:
+  pg-airflow-db-volume:
+  pg-data-db-volume:
