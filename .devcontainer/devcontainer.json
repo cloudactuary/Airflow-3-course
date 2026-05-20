@@ -1,0 +1,20 @@
+{
+    "name": "Airflow course project",
+    "dockerComposeFile": ["../docker-compose.yaml"],
+    "workspaceFolder": "/opt/airflow",
+    "service": "airflow-scheduler",
+    "postCreateCommand": "pip install --user -r ../requirements.txt",
+    "workspaceMount": "source=devcontainer-workspace,target=/workspace,type=volume",
+    "env": "../.env",
+    "customizations": {
+        // Configure properties specific to VS Code.
+        "vscode": {
+        // Add extension IDs to this array.
+        "extensions": [
+            "ms-python.python",          // Core Python extension
+            "ms-python.vscode-pylance",  // Fast, feature-rich language support
+            "ms-python.debugpy"          // Debugger support
+        ]
+        }
+    }
+}
