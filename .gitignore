@@ -1,0 +1,66 @@
+# Apache Airflow core files
+*.cfg
+*.db
+airflow.db
+standalone_admin_password.txt
+
+# Airflow runtime and logs
+logs/
+airflow-logs/
+airflow_logs/
+dags/test_*.py
+.airflow/
+
+# Local/Docker environment variables and secrets
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+
+# Docker specific (if using docker-compose)
+.docker/
+docker-compose.override.yml
+
+# Python environment and cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.tox/
+.coverage
+htmlcov/
+.venv
+venv/
+ENV/
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# IDEs and OS specific
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
