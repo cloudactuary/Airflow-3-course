@@ -40,9 +40,16 @@ CREATE TABLE IF NOT EXISTS users (
             "lastname": fake_user["personalInfo"]["lastName"],
             "email": fake_user["personalInfo"]["email"]
         }
+    
+    @task
+    def proceess_user(user_info_dict):
+        with open("/tmp/users.csv", "w") as f:
+            f.write(','.join(user_info_dict.keys()) + "\n")
+            f.write(','.join(map(str, [user_info_dict[k] for k in user_info_dict.keys()])) + "\n")
 
     fake_user = is_api_available()
-    extract_user(fake_user)
+    user_info = extract_user(fake_user)
+    proceess_user(user_info)
     
 dag_user_processing()
 
