@@ -1,7 +1,7 @@
 from airflow.sdk import dag, task
 from airflow.sdk.bases.sensor import PokeReturnValue
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
-
+from airflow.providers.standard.operators.python import PythonOperator
 
 @dag
 def dag_user_processing():
@@ -25,13 +25,24 @@ CREATE TABLE IF NOT EXISTS users (
     @task.sensor(poke_interval = 30, timeout = 600)
     def is_api_available() -> PokeReturnValue:
         import requests
-        resp = requests.get("https://randomuser.me/api")
+        resp = requests.get("https://raw.githubusercontent.com/marclamberti/datasets/refs/heads/main/fakeuser.json")
         if resp.status_code == 200:
             return PokeReturnValue(is_done = True, xcom_value = resp.json())
         else:
             return PokeReturnValue(is_done = False, xcom_value = None)
 
-    is_api_available()
+    # this example how to use python code w/o PythonOperator
+    @task
+    def extract_user(fake_user):
+        return {
+            "id": fake_user["id"],
+            "firstname": fake_user["personalInfo"]["firstName"],
+            "lastname": fake_user["personalInfo"]["lastName"],
+            "email": fake_user["personalInfo"]["email"]
+        }
+
+    fake_user = is_api_available()
+    extract_user(fake_user)
     
 dag_user_processing()
 
