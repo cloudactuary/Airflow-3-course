@@ -40,3 +40,23 @@ def user_location(user: Asset, context: Context) -> dict[str]:
     return user_data[-1]["results"][0]["location"]
     # return user_data[-1]["results"][0]["location"]
 
+# user credentials assets
+@asset(
+    schedule = user
+)
+def user_credential(user: Asset, context: Context) -> dict[str]:
+
+    user_data = context['ti'].xcom_pull(
+        dag_id = user.name,
+        task_ids = user.name,
+        # latest user asset
+        include_prior_dates = True
+    )
+
+    if not user_data or "results" not in user_data[-1]:
+    # if not user_data or "results" not in user_data[-1]:
+        print("ERRROR EXIT.....")
+        return {}
+
+    return user_data[-1]["results"][0]["login"]
+
