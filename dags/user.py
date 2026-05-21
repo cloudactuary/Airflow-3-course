@@ -31,17 +31,12 @@ def user_location(user: Asset, context: Context) -> dict[str]:
         # latest user asset
         include_prior_dates = True
     )
-    print("-----")
-    print(user_data)
-    print("-----")
-    print(type(user_data))
-    print(len(user_data))
-    print("-----")
-    print(user_data[0].keys())
 
-    if not user_data or "results" not in user_data[0]:
+    if not user_data or "results" not in user_data[-1]:
+    # if not user_data or "results" not in user_data[-1]:
         print("ERRROR EXIT.....")
         return {}
 
-    return user_data[0]["results"][0]["location"]
+    return user_data[-1]["results"][0]["location"]
+    # return user_data[-1]["results"][0]["location"]
 
