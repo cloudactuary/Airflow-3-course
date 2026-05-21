@@ -2,6 +2,7 @@ from airflow.sdk import dag, task
 from airflow.sdk.bases.sensor import PokeReturnValue
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from airflow.providers.standard.operators.python import PythonOperator
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 @dag
 def dag_user_processing():
@@ -41,15 +42,33 @@ CREATE TABLE IF NOT EXISTS users (
             "email": fake_user["personalInfo"]["email"]
         }
     
+    COLUMNS_USER = ["id", "firstname", "lastname", "email"]
+
+
     @task
     def proceess_user(user_info_dict):
         with open("/tmp/users.csv", "w") as f:
             f.write(','.join(user_info_dict.keys()) + "\n")
-            f.write(','.join(map(str, [user_info_dict[k] for k in user_info_dict.keys()])) + "\n")
+            f.write(','.join(map(str, [user_info_dict[k] for k in COLUMNS_USER])) + "\n")
+        
+        with open("/tmp/users.csv", "r") as f:
+            print("file itself")
+            print(f.read())
 
-    fake_user = is_api_available()
-    user_info = extract_user(fake_user)
-    proceess_user(user_info)
+    @task
+    def store_user():
+        hook = PostgresHook(postgres_conn_id = "pg_conn")
+        hook.copy_expert(
+            sql = f"COPY users ({','.join(COLUMNS_USER)}) FROM stdin WITH DELIMITER ',' CSV HEADER;",
+            filename = "/tmp/users.csv"
+        )
+
+    # fake_user = is_api_available()
+    # user_info = extract_user(fake_user)
+    # proceess_user(user_info)
+    # store_user()
+
+    proceess_user(extract_user(create_table >> is_api_available())) >> store_user()
     
 dag_user_processing()
 
