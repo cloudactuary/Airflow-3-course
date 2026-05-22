@@ -15,16 +15,14 @@ def user(self) -> dict[str]:
     return None
 
 
-# second asset, take location from user
-# this will run after the `user` asset materialized
-@asset(
-    schedule = user
+@asset.multi(
+    schedule = user,
+    outlets = [
+        Asset(name = "user_location"),
+        Asset(name = "user_login"),
+    ]
 )
-def user_location(user: Asset, context: Context) -> dict[str]:
-
-    # if not user or "results" not in user:
-    #     return {}
-    
+def user_info_asset(user: Asset, context: Context) -> list[dict[str]]:
     user_data = context['ti'].xcom_pull(
         dag_id = user.name,
         task_ids = user.name,
@@ -32,31 +30,7 @@ def user_location(user: Asset, context: Context) -> dict[str]:
         include_prior_dates = True
     )
 
-    if not user_data or "results" not in user_data[-1]:
-    # if not user_data or "results" not in user_data[-1]:
-        print("ERRROR EXIT.....")
-        return {}
-
-    return user_data[-1]["results"][0]["location"]
-    # return user_data[-1]["results"][0]["location"]
-
-# user credentials assets
-@asset(
-    schedule = user
-)
-def user_credential(user: Asset, context: Context) -> dict[str]:
-
-    user_data = context['ti'].xcom_pull(
-        dag_id = user.name,
-        task_ids = user.name,
-        # latest user asset
-        include_prior_dates = True
-    )
-
-    if not user_data or "results" not in user_data[-1]:
-    # if not user_data or "results" not in user_data[-1]:
-        print("ERRROR EXIT.....")
-        return {}
-
-    return user_data[-1]["results"][0]["login"]
-
+    return [
+        user_data[-1]["results"][0]["location"],
+        user_data[-1]["results"][0]["login"],
+    ]
