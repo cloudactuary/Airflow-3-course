@@ -1,6 +1,14 @@
 {
     "name": "Airflow course project",
     "dockerComposeFile": ["../docker-compose.yaml"],
+    "runProfiles": ["flower"],
+    "runServices": [
+        "*",
+        "flower"
+    ],
+    // "runArgs": [
+    //     "--profile flower"
+    // ],
     "workspaceFolder": "/opt/airflow",
     "service": "airflow-scheduler",
     "postCreateCommand": "pip install --user -r ../requirements.txt",
