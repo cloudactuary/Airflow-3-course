@@ -3,12 +3,18 @@
     "dockerComposeFile": ["../docker-compose.yaml"],
     "runProfiles": ["flower"],
     "runServices": [
-        "*",
-        "flower"
+        "postgres",
+        "postgres_data",
+        "redis",
+        "airflow-apiserver",
+        "airflow-scheduler",
+        "airflow-dag-processor",
+        "airflow-worker-1",
+        "airflow-worker-2",
+        "airflow-triggerer",
+        "flower",
+        "pgadmin"
     ],
-    // "runArgs": [
-    //     "--profile flower"
-    // ],
     "workspaceFolder": "/opt/airflow",
     "service": "airflow-scheduler",
     "postCreateCommand": "pip install --user -r ../requirements.txt",
