@@ -9,8 +9,7 @@
         "airflow-apiserver",
         "airflow-scheduler",
         "airflow-dag-processor",
-        "airflow-worker-1",
-        "airflow-worker-2",
+        "airflow-worker",
         "airflow-triggerer",
         "flower",
         "pgadmin"
