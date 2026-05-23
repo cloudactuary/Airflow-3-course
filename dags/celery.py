@@ -8,11 +8,15 @@ def dag_celery():
     def a():
         sleep(2)
         
-    @task
+    @task(
+        queue =  "high_cpu"
+    )
     def b():
         sleep(2)
 
-    @task
+    @task(
+        queue =  "high_cpu"
+    )
     def c():
         sleep(2)
 
