@@ -1,21 +1,22 @@
 from airflow.sdk import dag, task, Context
+from typing import Dict, Any
 
 @dag
 def dag_xcom():
 
     @task
-    def t1() -> int:
-    # def t1(context: Context):
-        x = 42
-        return x # - the same as  `context['ti'].xcom_push(key = "my_key", value = x)`
+    def t1() -> Dict[str, Any]:
+        return {
+            "val1": 42,
+            "val2": "hello"
+        }
 
 
     @task
-    def t2(val: int):
-    # def t2(context: Context):
-        # val = context['ti'].xcom_pull(task_id = 't1', key = "my_key")
+    def t2(val: Dict[str, Any]):
 
-        print(val)
+        print(val["val1"])
+        print(val["val2"])
 
 
     val = t1()
