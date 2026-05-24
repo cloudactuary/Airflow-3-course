@@ -22,7 +22,7 @@ def branching_dag():
 
 
     val = a()
-    b(val) >> [eq_1(), neq_1()]
+    b(val) >> [eq_1(val), neq_1(val)]
 
 
 branching_dag()
