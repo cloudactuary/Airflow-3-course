@@ -27,7 +27,8 @@
             "ms-python.python",
             "ms-python.vscode-pylance",
             "ms-python.debugpy",
-            "google.geminicodeassist"
+            "google.geminicodeassist",
+            "tamasfe.even-better-toml"
         ],
         "settings": {
             "editor.formatOnSave": true

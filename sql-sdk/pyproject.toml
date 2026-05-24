@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "sql_sdk/__init__.py"
+
+[project]
+name = "sql-sdk"
+dynamic = ["version"]
+description = "SQL SDK for Airflow"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "apache-airflow>=3.0.0",
+    "typing-extensions>=4.0.0"
+]
+
+[project.entry-points.apache_airflow_provider]
+provider_info = "sql_sdk:get_provider_info"
